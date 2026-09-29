@@ -1,0 +1,77 @@
+{
+  "name": "mabizpos",
+  "version": "1.1.6",
+  "private": true,
+  "main": "app/background.js",
+  "description": "MabizPOS",
+  "author": "ZynCount",
+  "scripts": {
+    "preinstall": "npx only-allow npm",
+    "build:copy": "node build/copy-sources.js",
+    "build": "npm run build:copy && cross-env NODE_OPTIONS=--max-old-space-size=16384 nextron build",
+    "build:mac": "npm run build:copy && cross-env NODE_OPTIONS=--max-old-space-size=16384 nextron build --mac",
+    "build:win": "npm run build:copy && cross-env NODE_OPTIONS=--max-old-space-size=16384 nextron build --win --x64",
+    "postinstall": "electron-builder install-app-deps"
+  },
+  "engines": {
+    "npm": ">=8.0.0",
+    "node": ">=18.0.0"
+  },
+  "build": {
+    "appId": "com.zyncount.mabizpos",
+    "productName": "MabizPOS",
+    "npmRebuild": true,
+    "files": [
+      "app/**/*",
+      "package.json",
+      "node_modules/**/*"
+    ],
+    "extraResources": [
+      { "from": "resources/be/dist", "to": "be/dist" },
+      { "from": "resources/be/node_modules", "to": "be/node_modules" },
+      { "from": "resources/be/package.json", "to": "be/package.json" },
+      { "from": "resources/admin", "to": "admin" }
+    ],
+    "directories": {
+      "buildResources": "assets",
+      "output": "release"
+    },
+    "mac": {
+      "target": [
+        { "target": "dir", "arch": ["arm64"] }
+      ],
+      "identity": null,
+      "category": "public.app-category.business"
+    },
+    "win": {
+      "icon": "assets/icon.png",
+      "target": [
+        "nsis"
+      ]
+    },
+    "nsis": {
+      "oneClick": true,
+      "allowToChangeInstallationDirectory": false,
+      "perMachine": false,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "MabizPOS",
+      "runAfterFinish": true,
+      "deleteAppDataOnUninstall": false
+    }
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "cross-env": "^10.1.0",
+    "electron": "^39.2.7",
+    "electron-builder": "^26.4.0",
+    "next": "16.1.2",
+    "nextron": "^9.5.0",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "typescript": "^5"
+  }
+}
